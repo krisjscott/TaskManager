@@ -8,7 +8,7 @@ def get_task(db: Session, task_id: int):
 def get_all_tasks(db: Session, skip: int = 0, limit: int = 100):
     return db.query(Task).offset(skip).limit(limit).all()
 
-def create_task(db: Session, task: TaskCreate):
+def create_tasks(db: Session, task: TaskCreate):
     db_task = Task(
         title = task.title,
         description = task.description,
@@ -29,7 +29,7 @@ def update_task(db: Session, task_id: int, task: TaskUpdate):
         setattr(db_task, field, value)
 
     db.commit()
-    db.refresh(db.commit)
+    db.refresh(db_task)
     return db_task
 
 def delete_task(db:Session, task_id: int):
