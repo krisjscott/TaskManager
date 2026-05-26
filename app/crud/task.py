@@ -10,9 +10,9 @@ def get_all_tasks(db: Session, skip: int = 0, limit: int = 100):
 
 def create_tasks(db: Session, task: TaskCreate):
     db_task = Task(
-        title = task.title,
-        description = task.description,
-        is_done = task.is_done
+        title=task.title,
+        description=task.description,
+        is_done=task.is_done
     )
     db.add(db_task)
     db.commit()
@@ -23,19 +23,16 @@ def update_task(db: Session, task_id: int, task: TaskUpdate):
     db_task = get_task(db, task_id)
     if not db_task:
         return None
-    update_date = task.model_dump(exclude_unset = True)
-
-    for field, value in update_date.items():
+    update_data = task.model_dump(exclude_unset=True)
+    for field, value in update_data.items():
         setattr(db_task, field, value)
-
     db.commit()
     db.refresh(db_task)
     return db_task
 
-def delete_task(db:Session, task_id: int):
+def delete_task(db: Session, task_id: int):
     db_task = get_task(db, task_id)
     if not db_task:
-        print("Not found")
         return None
     db.delete(db_task)
     db.commit()
